@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import dj_database_url
+from django.conf.global_settings import DATABASES
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "locallibrary.settings")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -75,12 +78,22 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+#
+if os.getenv('SQLITE', False):
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}
+else:
+    # import dj_database_url
+    DATABASES['default'] = dj_database_url.config(
+        default='postgres://syahrwgskivjnz:5ead609a8b939845c3267561f7c6b028a147184f3e47803bd357445b288af7c6@ec2-3-224-8-189.compute-1.amazonaws.com:5432/d9jjtq0j39aagn')
 
 
 # Password validation
@@ -140,13 +153,14 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticHeroku')
 
 # The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
 
+DATABASE_URL = 'postgres://syahrwgskivjnz:5ead609a8b939845c3267561f7c6b028a147184f3e47803bd357445b288af7c6@ec2-3-224-8-189.compute-1.amazonaws.com:5432/d9jjtq0j39aagn'
+
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+#db_from_env = dj_database_url.config(conn_max_age=500)
+#DATABASES['default'].update(db_from_env)
