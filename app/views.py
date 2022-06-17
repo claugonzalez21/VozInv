@@ -25,9 +25,9 @@ def pagina_principal(request):
     # Genera contadores de algunos de los objetos principales
     noticias = Noticia.objects.all()
     #Paginacion
-    #paginator = Paginator(noticias, 8)
-    #page_number = request.GET.get('page')
-    #noticias_page = paginator.get_page(page_number)
+    paginator = Paginator(noticias, 8)
+    page_number = request.GET.get('page')
+    noticias_page = paginator.get_page(page_number)
 
     # Numero de visitas a esta view, como está contado en la variable de sesión.
     num_visits = request.session.get('num_visits', 0)
@@ -35,7 +35,9 @@ def pagina_principal(request):
 
     context = {
         'num_visits':num_visits,
-        'noticias': noticias
+        'noticias': noticias,
+        'noticias_page': noticias_page,
+        'page_number':page_number
     } 
     return render(request, 'pagina_principal.html', context=context)
 
