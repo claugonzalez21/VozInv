@@ -223,34 +223,3 @@ def anadirPregunta(request):
         return redirect('paginaprincipal') 
 
 
-def MisJuegos(request):
-    if request.method == 'POST':
-        preguntas=Cuestionario.objects.all()
-        puntuacion=0
-        n_incorrectas=0
-        n_correctas=0
-        total=0
-        for q in preguntas:
-            total+=1
-            if q.respuesta ==  request.POST.get(q.pregunta):
-                puntuacion+=1
-                n_correctas+=1
-            else:
-                n_incorrectas+=1
-        porcentaje = puntuacion/(total*10) *100
-        context = {
-            'puntuacion':puntuacion,
-            'time': request.POST.get('timer'),
-            'n_correctas':n_correctas,
-            'n_incorrectas':n_incorrectas,
-            'porcentaje':porcentaje,
-            'total':total
-        }
-        return render(request,'app/resultado_cuestionario.html',context)
-    else:
-        preguntas=Cuestionario.objects.all()
-        context = {
-            'preguntas':preguntas
-        }
-        return render(request,'app/misjuegos.html',context)
-
